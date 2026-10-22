@@ -1,0 +1,14 @@
+name: keepalive-main
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render main service
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 90 https://nova-probe.onrender.com/health)
+          echo "health status: $code"
+          test "$code" = "200"
